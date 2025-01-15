@@ -29,6 +29,23 @@ class Account:
     def __eq__(self, value): # return bool 
         return isinstance(value,Account) and value.holder == self.holder
     
+    def __repr__(self):
+        """
+            Account(name)
+        """
+
+        return f'Account({self.holder})'
+
+
+    def __str__(self):
+        """
+            Bank Accout:
+                holder: name
+                balance: $ 
+        """
+
+        return f"Bank Account\nholder: {self.holder}\nbalance: ${self.balance:.2f}\n"
+
     def time_to_retire(self, amount):
         """Return the number of years until balance would grow to amount."""
         assert self.balance > 0 and amount > 0 and self.interest > 0
@@ -112,7 +129,8 @@ class AsSeenOnTVAccount(CheckingAccount,SavingsAccount):
 
     
 
+ben = Account('Ben')
+ben.deposit(100)
 
-
-
+print(ben)
     

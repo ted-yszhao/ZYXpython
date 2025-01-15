@@ -23,6 +23,31 @@ class Link:
         self.first = first 
         self.rest = rest
 
+    def __repr__(self):
+        """
+
+        Returns:
+            _type_: _description_
+        """
+
+        if self.rest is Link.empty:
+            return f'Link({self.first})'
+        else:
+            return f'Link({self.first},{self.rest.__repr__()})'
+
+    def __str__(self):
+        """ [1,2,3,4,5]
+        [1] [2,3,4,5]
+        Returns:
+            _type_: _description_
+        """
+        result = '['
+        s = self
+        while not s is Link.empty:
+            result +=str(s.first) + ', '
+            s = s.rest
+        return result[:len(result) - 2] + ']'
+        
 
 @timer
 def double(s,v):
@@ -107,22 +132,68 @@ def slice_link(s, i , j):
 
     s[i:j]
     """
-    new_link=s
-    for _ in range(i):
-        new_link=new_link.rest
-    first=Link.empty
-    for _ in range(j-i):
-        if first is Link.empty:
-            first=Link(new_link.first)
-            last=first
-        else:
-            last.rest=Link(new_link.first)
-            last=last.rest
-        new_link=new_link.rest
-    return first
+
+    # iterative approach 
+    # new_link=s
+    # for _ in range(i):
+    #     new_link=new_link.rest
+    # first=Link.empty
+    # for _ in range(j-i):
+    #     if first is Link.empty:
+    #         first=Link(new_link.first)
+    #         last=first
+    #     else:
+    #         last.rest=Link(new_link.first)
+    #         last=last.rest
+    #     new_link=new_link.rest
+    # return first
+    
+    # recursive approach 
+
+    # 1st base case 
+    if s is Link.empty or j == 0:
+        return Link.empty
+    # 2nd base case 
+    if i == 0:
+        return Link(s.first, slice_link(s.rest , 0 , j - 1))
+    
+    return slice_link(s.rest , i - 1 , j - 1)
     
 
+def insert_link(s , x , i):
+    """Insert x into linked list s at index i
+    s = [2,3,4]
+    insert_link(s, 5, 0)
+    s = [5 , 2,3, ,4]
+    Args:
+        s (_type_): _description_
+        x (_type_): _description_
+        i (_type_): _description_
+    """
+    # iterative approach 
+    # i_link=s
+    # j=0
+    # while j<i:
+    #     if i_link is Link.empty:
+    #         return "Index out of range."
+    #     j+=1
+    #     i_link=i_link.rest
 
+    # new_link=Link(i_link.first,i_link.rest)
+    # i_link.first, i_link.rest=x,new_link
 
+    # recursive approach 
 
+    if s is Link.empty:
+        return 'Index out of range'
+    elif i == 0:
+        second = Link(s.first , s.rest)
+        s.first , s.rest = x , second
+    else:
+        insert_link(s.rest, x , i- 1)
 
+l1 = Link( 4 , Link ( 3 , Link(4, Link (5, Link(3)))))
+
+insert_link(l1, 10, 2)
+
+print(l1)
